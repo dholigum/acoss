@@ -105,7 +105,9 @@ def compute_features_from_list_file(input_txt_file, feature_dir, params=PROFILE)
             feature_dict = compute_features(audio_path=song, params=params)
             work_id = song.split('/')[-2]
             work_dir = "%s%s/" % (feature_dir, work_id)
+            print("work_dir", work_dir)
             if not os.path.exists(work_dir):
+                print("path doesnt exist")
                 os.makedirs(work_dir)
             # save as h5
             dd.io.save(work_dir + os.path.basename(song).replace(params['input_audio_format'], '') + '.h5',
