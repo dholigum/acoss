@@ -6,6 +6,7 @@ import argparse
 import time
 import glob
 import os
+import numpy as np
 import deepdish as dd
 from joblib import Parallel, delayed
 from progress.bar import Bar
@@ -146,7 +147,7 @@ def batch_feature_extractor(dataset_csv, audio_dir, feature_dir, n_workers=-1, m
     collection_files = glob.glob(batch_file_dir + '*.txt')
     feature_path = [feature_dir for i in range(len(collection_files))]
     param_list = [params for i in range(len(collection_files))]
-    args = zip(collection_files, feature_path, param_list)
+    args = zip(np.array(collection_files), np.array(feature_path), np.array(param_list))
     _LOG_FILE.info("Computing batch feature extraction using '%s' mode the profile: %s \n" % (mode, params))
     if mode == 'parallel':
         Parallel(n_jobs=n_workers, verbose=1)(delayed(compute_features_from_list_file)\
@@ -154,7 +155,7 @@ def batch_feature_extractor(dataset_csv, audio_dir, feature_dir, n_workers=-1, m
     elif mode == 'single':
         tic = time.monotonic()
         progressbar = Bar('acoss.extractor.batch_feature_extractor', 
-                        max=len(args), 
+                        max=len(list(args)), 
                         suffix='%(index)d/%(max)d - %(percent).1f%% - %(eta)ds')
         for cpath, fpath, param in args:
             compute_features_from_list_file(cpath, fpath, param)
