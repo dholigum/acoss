@@ -350,6 +350,7 @@ class AudioFeatures(object):
             feature_vector = self.chroma_cens()
         elif feature_type == 'crema':
             feature_vector = self.crema()
+            _LOG_FILE.info("Pake crema nihh")
         else:
             raise IOError("two_d_fft_mag: Wrong parameter 'feature type'. "
                           "Should be in one of these ['audio', 'hpcp', 'chroma_cqt', 'chroma_cens', 'crema']")
